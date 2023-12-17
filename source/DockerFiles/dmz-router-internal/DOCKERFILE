@@ -1,0 +1,5 @@
+FROM ubuntu:24.04
+COPY isc-dhcp-relay /etc/default/isc-dhcp-relay
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y iproute2 inetutils-ping curl host mtr-tiny tcpdump iptables traceroute isc-dhcp-relay \
+    && rm -rf /var/lib/apt/lists/* \

@@ -1,0 +1,2 @@
+SERVERS="192.168.2.5"
+INTERFACES="eth1 eth2"

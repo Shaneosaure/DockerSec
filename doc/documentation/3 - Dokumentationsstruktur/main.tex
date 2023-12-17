@@ -1,0 +1,173 @@
+%%%% SEITENRAENDER, SCHRIFTGROESSE UND ZEILENABSTAND NICHT ABAENDERN => SONST GIBT ES PUNKTEABZUG
+\documentclass[a4paper,11pt,singlespacing]{article}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{biblatex}
+
+
+
+
+\usepackage{listings,xcolor}
+%opening
+\title{DockerSec: Cybersecurity Training and Testing Environment}
+\author{
+	Rémi JARDRET 20741372,
+	Stéphane SIMON 21641381
+	}
+
+
+\begin{document}
+% Absatzeinrückung verhindern
+\setlength{\parindent}{0ex}
+
+
+\begin{titlepage}
+	
+	\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+	
+	\center % Center everything on the page
+	
+	%----------------------------------------------------------------------------------------
+	%	HEADING SECTIONS
+	%----------------------------------------------------------------------------------------
+		
+	
+	\includegraphics[width=7cm]{images/rwu_logo.png}\\[1.5cm] % Include a department/university logo - this will require the graphicx package
+	
+	\textsc{\LARGE University of Applied Sciences Ravensburg Weingarten}\\[1.5cm] 
+	\textsc{\Large Department of
+		Electrical Engineering
+		and Computer Science}\\[0.5cm]
+	\textsc{\large Bachelor Project}\\[0.5cm] 
+	
+	%----------------------------------------------------------------------------------------
+	%	TITLE SECTION
+	%----------------------------------------------------------------------------------------
+	
+	\HRule \\[0.4cm]
+	{ \huge \bfseries DockerSec: Cybersecurity Training and Testing Environment}\\[0.4cm] 
+	\HRule \\[3.5cm]
+	
+	%----------------------------------------------------------------------------------------
+	%	AUTHOR SECTION
+	%----------------------------------------------------------------------------------------
+	
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushleft} \large
+			\emph{Author:}\\
+   			Rémi \textsc{JARDRET}\\
+			20741372\\
+			Stéphane \textsc{SIMON}\\
+			21641381
+		\end{flushleft}
+	\end{minipage}
+	~
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushright} \large
+			\emph{Supervisor:} \\
+			Herr Benjamin \textsc{Stähle}\\ % Supervisor's Name
+            \& \\
+			Herr Norbert \textsc{Perk} % Supervisor's Name
+		\end{flushright}
+	\end{minipage}\\[5cm]
+	
+	% If you don't want a supervisor, uncomment the two lines below and remove the section above
+	%\Large \emph{Author:}\\
+	%John \textsc{Smith}\\[3cm] % Your name
+	
+	%----------------------------------------------------------------------------------------
+	%	DATE SECTION
+	%----------------------------------------------------------------------------------------
+	
+	{\large \today}\\[5cm] % Date, change the \today to a set date if you want to be precise
+	
+	%----------------------------------------------------------------------------------------
+	%	LOGO SECTION
+	%----------------------------------------------------------------------------------------
+
+	%----------------------------------------------------------------------------------------
+	
+	\vfill % Fill the rest of the page with whitespace
+	
+\end{titlepage}
+
+
+\tableofcontents
+\pagebreak
+
+
+
+\section{Introduction}
+    \subsection{Motivation}
+    \subsection{Problem}
+    \subsection{Objectives}
+
+\section{Project Requirements}
+    \subsection{Context}
+    \subsection{Requirements}
+        \subsubsection{Functional Requirements}
+        \subsubsection{Technical Requirements}
+    \subsection{Project Management}
+        \subsubsection{Timeline}
+        \subsubsection{Roles}
+        \subsubsection{Resources}
+    \subsection{Constraints}
+    \subsection{Deliverables}
+
+\section{Implementation}
+    \subsection{Docker}
+        \subsubsection{Containers}
+            \paragraph{- Eve}
+            \paragraph{- HTTP server aka Juiceshop}
+            \paragraph{- Bob, the victim, aka metasploitable2}
+            \paragraph{- Routers}
+        \subsubsection{Networks}
+            \paragraph{- macvlan in bridge mode}
+            \paragraph{- IPv6 disabled}
+            \paragraph{- Docker administration}
+        \subsubsection{Docker Hub}
+            \paragraph{- Required for hosting container images}
+        \subsubsection{Docker Compose}
+            \paragraph{- Perfect to build fast and automatically}
+            \paragraph{- Almost all the settings in the same place}
+            \paragraph{- Powerful tool}
+    \subsection{Networking Specificities}
+        \subsubsection{Custom Routers with Firewalls}
+            \paragraph{- iptables for NAT and routing}
+            \paragraph{- iptables for firewall}
+        \subsubsection{Gateways}
+            \paragraph{- ip routes for gateways and subnets}
+    \subsection{Deployment}
+        \subsubsection{Comparison with VMs Setup}
+            \paragraph{- Depending on network speed, we are speaking minutes against hours}
+            \paragraph{- Less system resource consumption}
+            \paragraph{- Purely graphical-less}
+        \subsubsection{Requirements (System Specifications)}
+            \paragraph{- Docker installed}
+            \paragraph{- Storage space}
+            \paragraph{- Network access for first install}
+
+\section{Evaluation and Perspectives}
+    \subsection{Project Requirements Met}
+        \subsubsection{Pentesting}
+        \subsubsection{Sysadministration}
+    \subsection{Improvements}
+    \subsection{Future of Project}
+
+\section{Conclusion}
+    \subsection{Gained Experience (Personal Feels and Improvements)}
+    \subsection{Resultant Ideas}
+
+\section{Appendices}
+    \subsection{Project's Architecture}
+    \subsection{GANTT Diagram}
+    \subsection{More to Come}
+
+
+
+\end{document}
+

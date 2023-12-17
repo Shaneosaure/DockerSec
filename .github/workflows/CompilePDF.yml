@@ -1,0 +1,31 @@
+name: CompilePDF
+on:
+  push:
+    paths:
+      - 'doc/documentation/*/*.tex'
+jobs:
+  CompilePDF:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v3
+
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: doc/documentation/*/main.tex
+          work_in_root_file_dir: true
+          
+      - name: Rename and Upload PDF files
+        run: |
+          for pdf_file in doc/documentation/*/main.pdf; do
+            folder=$(dirname "$pdf_file")
+            mv "$pdf_file" "$folder/../../../$(basename "$folder").pdf"
+          done
+          
+      - name: Upload PDF file
+        uses: actions/upload-artifact@v3
+        with:
+          name: Documentations
+          path: '*.pdf'

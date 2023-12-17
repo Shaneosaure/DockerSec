@@ -1,0 +1,13 @@
+$TTL 1D
+@       IN      SOA     ns1.juiceshop.local. admin.juiceshop.local. (
+                2023111601 ; Serial
+                3H ; Refresh
+                15 ; Retry
+                1w ; Expire
+                3h ; Negative Cache TTL
+);
+
+@       IN      NS      ns1.juiceshop.local.
+@       IN      A       192.168.3.12
+www     IN      A       192.168.3.12
+ns1     IN      A       192.168.3.13

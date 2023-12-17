@@ -1,0 +1,170 @@
+services:
+  DMZ_Router_External:
+    image: shaneosaure/dockersec-dmz-router-external
+    cap_add:
+      - NET_ADMIN
+    command: >-
+      sh -c "iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE &&
+      iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE &&
+      iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT &&
+      iptables -A FORWARD -i eth0 -o eth0 -j ACCEPT &&
+      iptables -A FORWARD -i eth0 -o eth1 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT &&
+      iptables -A FORWARD -i eth0 -o eth1 -p icmp --icmp-type echo-reply -j ACCEPT &&
+      iptables -A FORWARD -i eth0 -o eth1 -p tcp --dport 22 -j ACCEPT &&
+      iptables -A FORWARD -i eth0 -o eth1 -p tcp --dport 53 -j ACCEPT &&
+      iptables -A FORWARD -i eth0 -o eth1 -p udp --dport 53 -j ACCEPT &&
+      iptables -A FORWARD -i eth0 -o eth1 -p tcp --dport 80 -j ACCEPT &&
+      iptables -A FORWARD -i eth1 -o eth1 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT &&
+      iptables -P FORWARD DROP &&
+      ip route add 192.168.1.0/24 via 192.168.3.10 &&
+      ip route add 192.168.2.0/24 via 192.168.3.10 &&
+      echo 'search dockersec.com' > /etc/resolv.conf &&
+      echo 'nameserver 192.168.3.13' >> /etc/resolv.conf &&
+      tail -f /dev/null"
+    networks:
+      DMZ:
+        ipv4_address: 192.168.3.20
+      External:
+        ipv4_address: 192.168.4.10
+    restart: always
+
+  DMZ_Router_Internal:
+    image: shaneosaure/dockersec-dmz-router-internal
+    cap_add:
+      - NET_ADMIN
+    command: >-
+      sh -c "iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE &&
+      iptables -t nat -A POSTROUTING -o eth2 -j MASQUERADE &&
+      iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE &&
+      iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT &&
+      iptables -A FORWARD -i eth2 -o eth0 -j ACCEPT &&
+      iptables -A FORWARD -i eth0 -o eth1 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT &&
+      iptables -A FORWARD -i eth0 -o eth2 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT &&
+      iptables -A FORWARD -i eth1 -o eth2 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT &&
+      iptables -A FORWARD -i eth2 -o eth1 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT &&
+      iptables -A FORWARD -i eth0 -o eth1 -p tcp --dport 22 -j ACCEPT &&
+      iptables -A FORWARD -i eth0 -o eth2 -p tcp --dport 22 -j ACCEPT &&
+      iptables -P FORWARD DROP &&
+      ip route add default via 192.168.3.20 &&
+      service isc-dhcp-relay restart &&
+      echo 'search dockersec.com' > /etc/resolv.conf &&
+      echo 'nameserver 192.168.3.13' >> /etc/resolv.conf &&
+      tail -f /dev/null"
+    networks:
+      Internal1:
+        ipv4_address: 192.168.1.10
+      Internal2:
+        ipv4_address: 192.168.2.10
+      DMZ:
+        ipv4_address: 192.168.3.10
+    restart: always
+
+  pc1:
+    image: shaneosaure/dockersec-pc1
+    cap_add:
+      - NET_ADMIN
+    command: >-
+      sh -c "ip route add default via 192.168.1.10 &&
+      /bin/services.sh &&
+      dhclient &&
+      cat /etc/resolv.conf.dhclient-new > /etc/resolv.conf &&
+      tail -f /dev/null"
+    networks:
+      Internal1:
+        ipv4_address: 192.168.1.5
+    restart: always
+  Eve:
+    image: shaneosaure/dockersec-eve:light
+    cap_add:
+      - NET_ADMIN
+    command: >-
+      sh -c "route del default &&
+      ip route add default via 192.168.4.10 &&
+      service postgresql start &&
+      tail -f /dev/null"
+    networks:
+      External:
+        ipv4_address: 192.168.4.3
+    restart: always
+
+  DHCPServer:
+    image: shaneosaure/dockersec-dhcp-server
+    cap_add:
+      - NET_ADMIN
+    command: >-
+      sh -c "ip route add default via 192.168.2.10 &&
+      /usr/sbin/dhcpd &&
+      echo 'search dockersec.com' > /etc/resolv.conf &&
+      echo 'nameserver 192.168.3.13' >> /etc/resolv.conf &&
+      tail -f /dev/null"
+    networks:
+      Internal2:
+        ipv4_address: 192.168.2.5
+    restart: always
+
+  DNSServer:
+    image: shaneosaure/dockersec-dns-server
+    cap_add:
+      - NET_ADMIN
+    command: >-
+      sh -c "ip route add default via 192.168.3.20 &&
+      service named restart &&
+      echo 'search dockersec.com' > /etc/resolv.conf &&
+      echo 'nameserver 192.168.3.13' >> /etc/resolv.conf &&
+      tail -f /dev/null"
+    networks:
+      DMZ:
+        ipv4_address: 192.168.3.13
+    restart: always
+
+  HTTPServer:
+    image: shaneosaure/dockersec-http-server
+    cap_add:
+      - NET_ADMIN
+    command: >-
+       sh -c "ip route add default via 192.168.3.20 &&
+       echo 'search dockersec.com' > /etc/resolv.conf &&
+       echo 'nameserver 192.168.3.13' >> /etc/resolv.conf &&
+       node /juice-shop/build/app.js "
+    ports:
+      - "80:3000"
+    networks:
+      DMZ:
+        ipv4_address: 192.168.3.12
+    restart: always
+
+networks:
+  Internal1:
+    driver: macvlan
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+    internal: true
+    driver_opts:
+      macvlan_mode: bridge
+  Internal2:
+    driver: macvlan
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 192.168.2.0/24
+    internal: true
+    driver_opts:
+      macvlan_mode: bridge
+  DMZ:
+    driver: macvlan
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 192.168.3.0/24
+    internal: true
+    driver_opts:
+      macvlan_mode: bridge
+  External:
+    driver: bridge
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 192.168.4.0/24
+

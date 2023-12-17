@@ -1,0 +1,246 @@
+FROM kalilinux/kali-rolling
+
+WORKDIR /root 
+
+RUN  apt -y update --fix-missing && apt -y upgrade && apt -y autoremove && apt clean \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y iproute2 inetutils-ping curl host mtr-tiny tcpdump iptables traceroute ssh
+
+RUN apt install -y --no-install-recommends \
+    aircrack-ng
+
+RUN apt install -y --no-install-recommends \
+    amap
+
+RUN apt install -y --no-install-recommends \
+    apt-utils
+
+RUN apt install -y --no-install-recommends \
+    bsdmainutils
+
+RUN apt install -y --no-install-recommends \
+    cewl
+
+RUN apt install -y --no-install-recommends \
+    crackmapexec
+
+RUN apt install -y --no-install-recommends \
+    crunch
+
+RUN apt install -y --no-install-recommends \
+    curl
+
+RUN apt install -y --no-install-recommends \
+    dirb
+
+RUN apt install -y --no-install-recommends \
+    dirbuster
+
+RUN apt install -y --no-install-recommends \
+    dnsenum
+
+RUN apt install -y --no-install-recommends \
+    dnsrecon
+
+RUN apt install -y --no-install-recommends \
+    dnsutils
+
+RUN apt install -y --no-install-recommends \
+    dos2unix
+
+RUN apt install -y --no-install-recommends \
+    enum4linux
+
+RUN apt install -y --no-install-recommends \
+    exploitdb
+
+RUN apt install -y --no-install-recommends \
+    ftp
+
+RUN apt install -y --no-install-recommends \
+    gcc
+
+RUN apt install -y --no-install-recommends \
+    git
+
+RUN apt install -y --no-install-recommends \
+    gobuster
+
+RUN apt install -y --no-install-recommends \
+    golang
+
+RUN apt install -y --no-install-recommends \
+    hashcat
+
+RUN apt install -y --no-install-recommends \
+    hping3
+
+RUN apt install -y --no-install-recommends \
+    hydra
+
+RUN apt install -y --no-install-recommends \
+    iputils-ping
+
+RUN apt install -y --no-install-recommends \
+    john
+
+RUN apt install -y --no-install-recommends \
+    joomscan
+
+RUN apt install -y --no-install-recommends \
+    kpcli
+
+RUN apt install -y --no-install-recommends \
+    libffi-dev
+
+RUN apt install -y --no-install-recommends \
+    make
+
+RUN apt install -y --no-install-recommends \
+    masscan
+
+RUN apt install -y --no-install-recommends \
+    metasploit-framework
+
+RUN apt install -y --no-install-recommends \
+    mimikatz
+
+RUN apt install -y --no-install-recommends \
+    nasm
+
+RUN apt install -y --no-install-recommends \
+    nbtscan
+
+RUN apt install -y --no-install-recommends \
+    ncat
+
+RUN apt install -y --no-install-recommends \
+    netcat-traditional
+
+RUN apt install -y --no-install-recommends \
+    nikto
+
+RUN apt install -y --no-install-recommends \
+    nmap
+
+RUN apt install -y --no-install-recommends \
+    onesixtyone
+
+RUN apt install -y --no-install-recommends \
+    oscanner
+
+RUN apt install -y --no-install-recommends \
+    passing-the-hash
+
+RUN apt install -y --no-install-recommends \
+    patator
+
+RUN apt install -y --no-install-recommends \
+    php
+
+RUN apt install -y --no-install-recommends \
+    powershell
+
+RUN apt install -y --no-install-recommends \
+    powersploit
+
+RUN apt install -y --no-install-recommends \
+    proxychains4
+
+RUN apt install -y --no-install-recommends \
+    python2
+
+RUN apt install -y --no-install-recommends \
+    python3
+
+RUN apt install -y --no-install-recommends \
+    python3-pip
+
+RUN apt install -y --no-install-recommends \
+    python3-setuptools
+
+RUN apt install -y --no-install-recommends \
+    python3-dev
+
+RUN apt install -y --no-install-recommends \
+    python3-setuptools
+
+RUN apt install -y --no-install-recommends \
+    recon-ng
+
+RUN apt install -y --no-install-recommends \
+    responder
+
+RUN apt install -y --no-install-recommends \
+    ruby-dev
+
+RUN apt install -y --no-install-recommends \
+    samba
+
+RUN apt install -y --no-install-recommends \
+    samdump2
+
+RUN apt install -y --no-install-recommends \
+    seclists
+
+RUN apt install -y --no-install-recommends \
+    sipvicious
+
+RUN apt install -y --no-install-recommends \
+    smbclient
+
+RUN apt install -y --no-install-recommends \
+    smbmap
+
+RUN apt install -y --no-install-recommends \
+    smtp-user-enum
+
+RUN apt install -y --no-install-recommends \
+    snmp
+
+RUN apt install -y --no-install-recommends \
+    socat
+
+RUN apt install -y --no-install-recommends \
+    sqlmap
+
+RUN apt install -y --no-install-recommends \
+    ssh-audit
+
+RUN apt install -y --no-install-recommends \
+    sslscan
+
+RUN apt install -y --no-install-recommends \
+    tcpdump
+
+RUN apt install -y --no-install-recommends \
+    testssl.sh
+
+RUN apt install -y --no-install-recommends \
+    theharvester
+
+RUN apt install -y --no-install-recommends \
+    tnscmd10g
+
+RUN apt install -y --no-install-recommends \
+    vim
+
+RUN apt install -y --no-install-recommends \
+    wafw00f
+
+RUN apt install -y --no-install-recommends \
+    weevely
+
+RUN apt install -y --no-install-recommends \
+    wfuzz
+
+RUN apt install -y --no-install-recommends \
+    whatweb
+
+RUN apt install -y --no-install-recommends \
+    wordlists
+
+RUN cp -f /usr/share/kali-defaults/etc/ssh/ssh_config.d/kali-wide-compat.conf /etc/ssh/ssh_config.d/kali-wide-compat.conf
+
+RUN rm -rf /var/lib/apt/lists/*
+
+RUN apt autoclean && apt clean && apt autoremove -y
