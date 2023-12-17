@@ -1,0 +1,9 @@
+FROM kalilinux/kali-rolling
+
+WORKDIR /root 
+
+RUN apt -y update --fix-missing && apt -y upgrade && apt -y autoremove && apt clean \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y iproute2 inetutils-ping curl host mtr-tiny tcpdump iptables traceroute kali-linux-headless ssh\ 
+    && cp -f /usr/share/kali-defaults/etc/ssh/ssh_config.d/kali-wide-compat.conf /etc/ssh/ssh_config.d/kali-wide-compat.conf \
+    && rm -rf /var/lib/apt/lists/*
+
