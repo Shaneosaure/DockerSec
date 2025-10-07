@@ -28,7 +28,7 @@ jobs:
       - name: Lint dhcp-server Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./source/DockerFiles/dhcp-server/Dockerfile
+          dockerfile: ./DockerFiles/dhcp-server/Dockerfile
           format: sarif
           output-file: hadolint-dhcp-server.sarif
           no-fail: true
@@ -37,7 +37,7 @@ jobs:
       - name: Lint dmz-router-external Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./source/DockerFiles/dmz-router-external/Dockerfile
+          dockerfile: ./DockerFiles/dmz-router-external/Dockerfile
           format: sarif
           output-file: hadolint-dmz-router-external.sarif
           no-fail: true
@@ -46,7 +46,7 @@ jobs:
       - name: Lint dmz-router-internal Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./source/DockerFiles/dmz-router-internal/Dockerfile
+          dockerfile: ./DockerFiles/dmz-router-internal/Dockerfile
           format: sarif
           output-file: hadolint-dmz-router-internal.sarif
           no-fail: true
@@ -55,7 +55,7 @@ jobs:
       - name: Lint dns-server Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./source/DockerFiles/dns-server/Dockerfile
+          dockerfile: ./DockerFiles/dns-server/Dockerfile
           format: sarif
           output-file: hadolint-dns-server.sarif
           no-fail: true
@@ -64,7 +64,7 @@ jobs:
       - name: Lint eve Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./source/DockerFiles/eve/Dockerfile
+          dockerfile: ./DockerFiles/eve/Dockerfile
           format: sarif
           output-file: hadolint-eve.sarif
           no-fail: true
@@ -73,7 +73,7 @@ jobs:
       - name: Lint http-server Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./source/DockerFiles/http-server/Dockerfile
+          dockerfile: ./DockerFiles/http-server/Dockerfile
           format: sarif
           output-file: hadolint-http-server.sarif
           no-fail: true
@@ -82,7 +82,7 @@ jobs:
       - name: Lint pc1 Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./source/DockerFiles/pc1/Dockerfile
+          dockerfile: ./DockerFiles/pc1/Dockerfile
           format: sarif
           output-file: hadolint-pc1.sarif
           no-fail: true
