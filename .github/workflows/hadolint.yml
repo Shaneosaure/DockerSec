@@ -24,7 +24,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 1️⃣ dhcp-server
       - name: Lint dhcp-server DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
@@ -33,7 +32,13 @@ jobs:
           output-file: hadolint-dhcp-server.sarif
           no-fail: true
 
-      # 2️⃣ dmz-router-external
+      - name: Upload dhcp-server SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: hadolint-dhcp-server.sarif
+          category: dhcp-server
+          wait-for-processing: true
+
       - name: Lint dmz-router-external DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
@@ -42,7 +47,13 @@ jobs:
           output-file: hadolint-dmz-router-external.sarif
           no-fail: true
 
-      # 3️⃣ dmz-router-internal
+      - name: Upload dmz-router-external SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: hadolint-dmz-router-external.sarif
+          category: dmz-router-external
+          wait-for-processing: true
+
       - name: Lint dmz-router-internal DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
@@ -51,7 +62,13 @@ jobs:
           output-file: hadolint-dmz-router-internal.sarif
           no-fail: true
 
-      # 4️⃣ dns-server
+      - name: Upload dmz-router-internal SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: hadolint-dmz-router-internal.sarif
+          category: dmz-router-internal
+          wait-for-processing: true
+
       - name: Lint dns-server DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
@@ -60,7 +77,13 @@ jobs:
           output-file: hadolint-dns-server.sarif
           no-fail: true
 
-      # 5️⃣ eve
+      - name: Upload dns-server SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: hadolint-dns-server.sarif
+          category: dns-server
+          wait-for-processing: true
+
       - name: Lint eve DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
@@ -69,7 +92,13 @@ jobs:
           output-file: hadolint-eve.sarif
           no-fail: true
 
-      # 6️⃣ http-server
+      - name: Upload eve SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: hadolint-eve.sarif
+          category: eve
+          wait-for-processing: true
+
       - name: Lint http-server DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
@@ -78,7 +107,13 @@ jobs:
           output-file: hadolint-http-server.sarif
           no-fail: true
 
-      # 7️⃣ pc1
+      - name: Upload http-server SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: hadolint-http-server.sarif
+          category: http-server
+          wait-for-processing: true
+
       - name: Lint pc1 DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
@@ -87,9 +122,9 @@ jobs:
           output-file: hadolint-pc1.sarif
           no-fail: true
 
-      # 📤 Upload all SARIF reports (GitHub accepte plusieurs fichiers)
-      - name: Upload Hadolint results
+      - name: Upload pc1 SARIF
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: .
+          sarif_file: hadolint-pc1.sarif
+          category: pc1
           wait-for-processing: true
