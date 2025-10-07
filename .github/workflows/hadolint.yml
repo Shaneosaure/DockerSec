@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   hadolint:
-    name: Run hadolint scanning on all Dockerfiles
+    name: Run Hadolint on all Dockerfiles
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -24,34 +24,72 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Find all Dockerfiles
-        id: dockerfiles
-        run: |
-          files=$(find ./source/DockerFiles -type f -iname "Dockerfile" | tr '\n' ',')
-          echo "files=$files" >> $GITHUB_OUTPUT
-
-      - name: Lint each Dockerfile
+      # 1️⃣ dhcp-server
+      - name: Lint dhcp-server Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ${{ item }}
+          dockerfile: ./source/DockerFiles/dhcp-server/Dockerfile
           format: sarif
-          output-file: hadolint-${{ item##*/ }}.sarif
+          output-file: hadolint-dhcp-server.sarif
           no-fail: true
-        continue-on-error: true
-        strategy:
-          matrix:
-            item: ${{ fromJson(format('["{0}"]', steps.dockerfiles.outputs.files)) }}
 
-      - name: Merge SARIF files
-        run: |
-          echo '{"version":"2.1.0","runs":[]}' > hadolint-results.sarif
-          for sarif in *.sarif; do
-            jq -s '.|{version:"2.1.0",runs:(.[0].runs + .[1].runs)}' hadolint-results.sarif "$sarif" > tmp.sarif
-            mv tmp.sarif hadolint-results.sarif
-          done
+      # 2️⃣ dmz-router-external
+      - name: Lint dmz-router-external Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: ./source/DockerFiles/dmz-router-external/Dockerfile
+          format: sarif
+          output-file: hadolint-dmz-router-external.sarif
+          no-fail: true
 
-      - name: Upload combined SARIF results
+      # 3️⃣ dmz-router-internal
+      - name: Lint dmz-router-internal Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: ./source/DockerFiles/dmz-router-internal/Dockerfile
+          format: sarif
+          output-file: hadolint-dmz-router-internal.sarif
+          no-fail: true
+
+      # 4️⃣ dns-server
+      - name: Lint dns-server Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: ./source/DockerFiles/dns-server/Dockerfile
+          format: sarif
+          output-file: hadolint-dns-server.sarif
+          no-fail: true
+
+      # 5️⃣ eve
+      - name: Lint eve Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: ./source/DockerFiles/eve/Dockerfile
+          format: sarif
+          output-file: hadolint-eve.sarif
+          no-fail: true
+
+      # 6️⃣ http-server
+      - name: Lint http-server Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: ./source/DockerFiles/http-server/Dockerfile
+          format: sarif
+          output-file: hadolint-http-server.sarif
+          no-fail: true
+
+      # 7️⃣ pc1
+      - name: Lint pc1 Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: ./source/DockerFiles/pc1/Dockerfile
+          format: sarif
+          output-file: hadolint-pc1.sarif
+          no-fail: true
+
+      # 📤 Upload all SARIF reports (GitHub gère plusieurs fichiers)
+      - name: Upload Hadolint results
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: hadolint-results.sarif
+          sarif_file: .
           wait-for-processing: true
