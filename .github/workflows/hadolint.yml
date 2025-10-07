@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: '28 13 * * 2'
+    - cron: '18 15 * * 4'
 
 permissions:
   contents: read
@@ -19,24 +19,39 @@ jobs:
       contents: read
       security-events: write
       actions: read
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Find and lint all Dockerfiles
+      - name: Find all Dockerfiles
+        id: dockerfiles
         run: |
-          mkdir -p hadolint-results
-          for file in $(find ./source/DockerFiles -type f -iname "Dockerfile"); do
-            echo "Linting $file"
-            hadolint "$file" -f sarif > "hadolint-results/$(basename $(dirname $file)).sarif" || true
+          files=$(find ./source/DockerFiles -type f -iname "Dockerfile" | tr '\n' ',')
+          echo "files=$files" >> $GITHUB_OUTPUT
+
+      - name: Lint each Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: ${{ item }}
+          format: sarif
+          output-file: hadolint-${{ item##*/ }}.sarif
+          no-fail: true
+        continue-on-error: true
+        strategy:
+          matrix:
+            item: ${{ fromJson(format('["{0}"]', steps.dockerfiles.outputs.files)) }}
+
+      - name: Merge SARIF files
+        run: |
+          echo '{"version":"2.1.0","runs":[]}' > hadolint-results.sarif
+          for sarif in *.sarif; do
+            jq -s '.|{version:"2.1.0",runs:(.[0].runs + .[1].runs)}' hadolint-results.sarif "$sarif" > tmp.sarif
+            mv tmp.sarif hadolint-results.sarif
           done
 
-      - name: Merge SARIF results
-        run: |
-          jq -s '{ "runs": map(.runs) | add }' hadolint-results/*.sarif > hadolint-results/all-hadolint.sarif
-
-      - name: Upload analysis results to GitHub
+      - name: Upload combined SARIF results
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: hadolint-results/all-hadolint.sarif
+          sarif_file: hadolint-results.sarif
           wait-for-processing: true
