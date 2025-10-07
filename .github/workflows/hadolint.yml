@@ -25,69 +25,69 @@ jobs:
         uses: actions/checkout@v4
 
       # 1️⃣ dhcp-server
-      - name: Lint dhcp-server Dockerfile
+      - name: Lint dhcp-server DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./DockerFiles/dhcp-server/Dockerfile
+          dockerfile: ./source/DockerFiles/dhcp-server/DOCKERFILE
           format: sarif
           output-file: hadolint-dhcp-server.sarif
           no-fail: true
 
       # 2️⃣ dmz-router-external
-      - name: Lint dmz-router-external Dockerfile
+      - name: Lint dmz-router-external DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./DockerFiles/dmz-router-external/Dockerfile
+          dockerfile: ./source/DockerFiles/dmz-router-external/DOCKERFILE
           format: sarif
           output-file: hadolint-dmz-router-external.sarif
           no-fail: true
 
       # 3️⃣ dmz-router-internal
-      - name: Lint dmz-router-internal Dockerfile
+      - name: Lint dmz-router-internal DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./DockerFiles/dmz-router-internal/Dockerfile
+          dockerfile: ./source/DockerFiles/dmz-router-internal/DOCKERFILE
           format: sarif
           output-file: hadolint-dmz-router-internal.sarif
           no-fail: true
 
       # 4️⃣ dns-server
-      - name: Lint dns-server Dockerfile
+      - name: Lint dns-server DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./DockerFiles/dns-server/Dockerfile
+          dockerfile: ./source/DockerFiles/dns-server/DOCKERFILE
           format: sarif
           output-file: hadolint-dns-server.sarif
           no-fail: true
 
       # 5️⃣ eve
-      - name: Lint eve Dockerfile
+      - name: Lint eve DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./DockerFiles/eve/Dockerfile
+          dockerfile: ./source/DockerFiles/eve/DOCKERFILE
           format: sarif
           output-file: hadolint-eve.sarif
           no-fail: true
 
       # 6️⃣ http-server
-      - name: Lint http-server Dockerfile
+      - name: Lint http-server DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./DockerFiles/http-server/Dockerfile
+          dockerfile: ./source/DockerFiles/http-server/DOCKERFILE
           format: sarif
           output-file: hadolint-http-server.sarif
           no-fail: true
 
       # 7️⃣ pc1
-      - name: Lint pc1 Dockerfile
+      - name: Lint pc1 DOCKERFILE
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./DockerFiles/pc1/Dockerfile
+          dockerfile: ./source/DockerFiles/pc1/DOCKERFILE
           format: sarif
           output-file: hadolint-pc1.sarif
           no-fail: true
 
-      # 📤 Upload all SARIF reports (GitHub gère plusieurs fichiers)
+      # 📤 Upload all SARIF reports (GitHub accepte plusieurs fichiers)
       - name: Upload Hadolint results
         uses: github/codeql-action/upload-sarif@v3
         with:
