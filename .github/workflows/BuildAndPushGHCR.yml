@@ -15,14 +15,34 @@ jobs:
 
     strategy:
       matrix:
-        image:
-          - dhcp-server
-          - dmz-router-external
-          - dmz-router-internal
-          - dns-server
-          - eve
-          - http-server
-          - pc1
+        include:
+          - image: dhcp-server
+            file: DOCKERFILE
+            tag: latest
+          - image: dmz-router-external
+            file: DOCKERFILE
+            tag: latest
+          - image: dmz-router-internal
+            file: DOCKERFILE
+            tag: latest
+          - image: dns-server
+            file: DOCKERFILE
+            tag: latest
+          - image: eve
+            file: DOCKERFILE
+            tag: latest
+          - image: eve
+            file: DOCKERFILE-FULL
+            tag: full
+          - image: eve
+            file: DOCKERFILE-LIGHT
+            tag: light
+          - image: http-server
+            file: DOCKERFILE
+            tag: latest
+          - image: pc1
+            file: DOCKERFILE
+            tag: latest
 
     steps:
       - name: Checkout repository
@@ -39,17 +59,17 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push ${{ matrix.image }}
+      - name: Build and push ${{ matrix.image }} (${{ matrix.tag }})
         uses: docker/build-push-action@v6
         with:
           context: ./source/DockerFiles/${{ matrix.image }}
-          file: ./source/DockerFiles/${{ matrix.image }}/DOCKERFILE
+          file: ./source/DockerFiles/${{ matrix.image }}/${{ matrix.file }}
           push: true
           tags: |
-            ghcr.io/${{ env.owner_lc }}/dockersec-${{ matrix.image }}:latest
+            ghcr.io/${{ env.owner_lc }}/dockersec-${{ matrix.image }}:${{ matrix.tag }}
             ghcr.io/${{ env.owner_lc }}/dockersec-${{ matrix.image }}:${{ github.sha }}
           labels: |
             org.opencontainers.image.source=${{ github.repository }}
             org.opencontainers.image.title=dockersec-${{ matrix.image }}
-            org.opencontainers.image.description=DockerSec component ${{ matrix.image }}
+            org.opencontainers.image.description=DockerSec component ${{ matrix.image }} (${{ matrix.tag }})
             org.opencontainers.image.licenses=MIT
