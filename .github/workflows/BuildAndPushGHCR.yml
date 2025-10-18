@@ -62,7 +62,7 @@ jobs:
       - name: Build and push ${{ matrix.image }} (${{ matrix.tag }})
         uses: docker/build-push-action@v6
         with:
-          context: ./source/DockerFiles/${{ matrix.image }}
+          context: ./source
           file: ./source/DockerFiles/${{ matrix.image }}/${{ matrix.file }}
           push: true
           tags: |
