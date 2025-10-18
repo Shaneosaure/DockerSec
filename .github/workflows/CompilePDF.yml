@@ -1,33 +1,54 @@
 name: CompilePDF
+
 permissions:
   contents: read
+
 on:
   push:
     paths:
-      - 'doc/documentation/*/*.tex'
+      - 'doc/documentation/**/*.tex'
+
+  release:
+    types: [published]
+
+
 jobs:
   CompilePDF:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Set up Git repository
+      - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Compile LaTeX document
+      - name: Compile LaTeX documents
         uses: xu-cheng/latex-action@v4
         with:
           root_file: doc/documentation/*/main.tex
           work_in_root_file_dir: true
-          
-      - name: Rename and Upload PDF files
+
+      - name: Rename generated PDFs
         run: |
+          mkdir -p build
           for pdf_file in doc/documentation/*/main.pdf; do
             folder=$(dirname "$pdf_file")
-            mv "$pdf_file" "$folder/../../../$(basename "$folder").pdf"
+            name=$(basename "$folder")
+            mv "$pdf_file" "build/${name}.pdf"
           done
-          
-      - name: Upload PDF file
+          echo "✅ PDF files moved to build/:"
+          ls -lh build/
+
+      # 🧱 Étape 1 — Uploader en tant qu’artifact (toujours)
+      - name: Upload PDFs as workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Documentations
-          path: '*.pdf'
+          name: Documentation-PDFs
+          path: build/*.pdf
+
+      # 🧱 Étape 2 — Si déclenché par une release, upload sur la release GitHub
+      - name: Attach PDFs to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/*.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
