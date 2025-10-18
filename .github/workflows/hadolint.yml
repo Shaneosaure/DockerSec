@@ -33,7 +33,7 @@ jobs:
           no-fail: true
 
       - name: Upload dhcp-server SARIF
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: hadolint-dhcp-server.sarif
           category: dhcp-server
@@ -48,7 +48,7 @@ jobs:
           no-fail: true
 
       - name: Upload dmz-router-external SARIF
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: hadolint-dmz-router-external.sarif
           category: dmz-router-external
@@ -63,7 +63,7 @@ jobs:
           no-fail: true
 
       - name: Upload dmz-router-internal SARIF
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: hadolint-dmz-router-internal.sarif
           category: dmz-router-internal
@@ -78,7 +78,7 @@ jobs:
           no-fail: true
 
       - name: Upload dns-server SARIF
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: hadolint-dns-server.sarif
           category: dns-server
@@ -93,7 +93,7 @@ jobs:
           no-fail: true
 
       - name: Upload eve SARIF
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: hadolint-eve.sarif
           category: eve
@@ -108,7 +108,7 @@ jobs:
           no-fail: true
 
       - name: Upload http-server SARIF
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: hadolint-http-server.sarif
           category: http-server
@@ -123,7 +123,7 @@ jobs:
           no-fail: true
 
       - name: Upload pc1 SARIF
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: hadolint-pc1.sarif
           category: pc1
