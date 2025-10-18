@@ -1,0 +1,55 @@
+name: Build and Push All Docker Images to GHCR
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        image:
+          - dhcp-server
+          - dmz-router-external
+          - dmz-router-internal
+          - dns-server
+          - eve
+          - http-server
+          - pc1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare lowercase owner name
+        id: vars
+        run: echo "owner_lc=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push ${{ matrix.image }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ./source/DockerFiles/${{ matrix.image }}
+          file: ./source/DockerFiles/${{ matrix.image }}/DOCKERFILE
+          push: true
+          tags: |
+            ghcr.io/${{ env.owner_lc }}/dockersec-${{ matrix.image }}:latest
+            ghcr.io/${{ env.owner_lc }}/dockersec-${{ matrix.image }}:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.repository }}
+            org.opencontainers.image.title=dockersec-${{ matrix.image }}
+            org.opencontainers.image.description=DockerSec component ${{ matrix.image }}
+            org.opencontainers.image.licenses=MIT
