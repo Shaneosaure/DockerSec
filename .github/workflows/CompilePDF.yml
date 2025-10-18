@@ -1,4 +1,6 @@
 name: CompilePDF
+permissions:
+  contents: read
 on:
   push:
     paths:
