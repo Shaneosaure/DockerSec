@@ -37,6 +37,7 @@ LABEL maintainer="Bjoern Kimminich <bjoern.kimminich@owasp.org>" \
     org.opencontainers.image.created=$BUILD_DATE
 WORKDIR /juice-shop
 COPY --from=installer --chown=65532:0 /juice-shop .
+RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y git iproute2 inetutils-ping curl host mtr-tiny tcpdump iptables traceroute procps && rm -rf /var/lib/apt/lists/* 
 USER 65532
 ENV PORT=80
 EXPOSE 80
