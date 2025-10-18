@@ -82,7 +82,7 @@ jobs:
           cd -
           cp ./source/DockerFiles/http-server/DOCKERFILE /tmp/juice-shop/Dockerfile
           sed -i 's/safetyOverride: false/safetyOverride: true/' /tmp/juice-shop/config/default.yml
-
+          
       - name: Build and push ${{ matrix.image }} (${{ matrix.tag }})
         uses: docker/build-push-action@v6
         with:
@@ -90,11 +90,8 @@ jobs:
           file: ${{ matrix.image == 'http-server' && '/tmp/juice-shop/Dockerfile' || format('./source/DockerFiles/{0}/{1}', matrix.image, matrix.file) }}
           push: true
           tags: |
-            # 🧱 Si c’est EVE → versionnée avec flavor (ex: v1.0.0-bare)
             ${{ matrix.image == 'eve' && format('ghcr.io/{0}/dockersec-eve:{1}-{2}', env.owner_lc, env.version, matrix.tag) || '' }}
-            # 🧱 Si c’est EVE Light → alias "latest"
             ${{ matrix.image == 'eve' && matrix.tag == 'light' && format('ghcr.io/{0}/dockersec-eve:latest', env.owner_lc) || '' }}
-            # 🧱 Autres images → tag normalisé "latest"
             ${{ matrix.image != 'eve' && format('ghcr.io/{0}/dockersec-{1}:{2}', env.owner_lc, matrix.image, matrix.tag) || '' }}
           labels: |
             org.opencontainers.image.source=${{ github.repository }}

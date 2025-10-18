@@ -1,6 +1,6 @@
 services:
   DMZ_Router_External:
-    image: shaneosaure/dockersec-dmz-router-external
+    image: ghcr.io/shaneosaure/dockersec-dmz-router-external
     cap_add:
       - NET_ADMIN
     command: >-
@@ -29,7 +29,7 @@ services:
     restart: always
 
   DMZ_Router_Internal:
-    image: shaneosaure/dockersec-dmz-router-internal
+    image: ghcr.io/shaneosaure/dockersec-dmz-router-internal
     cap_add:
       - NET_ADMIN
     command: >-
@@ -60,7 +60,7 @@ services:
     restart: always
 
   pc1:
-    image: shaneosaure/dockersec-pc1
+    image: ghcr.io/shaneosaure/dockersec-pc1
     cap_add:
       - NET_ADMIN
     command: >-
@@ -74,7 +74,7 @@ services:
         ipv4_address: 192.168.1.5
     restart: always
   Eve:
-    image: shaneosaure/dockersec-eve:light
+    image: ghcr.io/shaneosaure/dockersec-eve:light
     cap_add:
       - NET_ADMIN
     command: >-
@@ -88,7 +88,7 @@ services:
     restart: always
 
   DHCPServer:
-    image: shaneosaure/dockersec-dhcp-server
+    image: ghcr.io/shaneosaure/dockersec-dhcp-server
     cap_add:
       - NET_ADMIN
     command: >-
@@ -103,7 +103,7 @@ services:
     restart: always
 
   DNSServer:
-    image: shaneosaure/dockersec-dns-server
+    image: ghcr.io/shaneosaure/dockersec-dns-server
     cap_add:
       - NET_ADMIN
     command: >-
@@ -118,7 +118,7 @@ services:
     restart: always
 
   HTTPServer:
-    image: shaneosaure/dockersec-http-server
+    image: ghcr.io/shaneosaure/dockersec-http-server
     cap_add:
       - NET_ADMIN
     command: >-
