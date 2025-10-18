@@ -127,7 +127,7 @@ services:
        echo 'nameserver 192.168.3.13' >> /etc/resolv.conf &&
        node /juice-shop/build/app.js "
     ports:
-      - "80:3000"
+      - "80:80"
     networks:
       DMZ:
         ipv4_address: 192.168.3.12
