@@ -59,11 +59,22 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # --- Special case for http-server (Juice Shop) ---
+      - name: Clone OWASP Juice Shop (only for http-server)
+        if: matrix.image == 'http-server'
+        run: |
+          git clone https://github.com/juice-shop/juice-shop.git /tmp/juice-shop
+          cd /tmp/juice-shop
+          git checkout v19.0.0
+          cd -
+          cp ./source/DockerFiles/http-server/DOCKERFILE /tmp/juice-shop/Dockerfile
+          sed -i 's/safetyOverride: false/safetyOverride: true/' /tmp/juice-shop/config/default.yml
+
       - name: Build and push ${{ matrix.image }} (${{ matrix.tag }})
         uses: docker/build-push-action@v6
         with:
-          context: ./source
-          file: ./source/DockerFiles/${{ matrix.image }}/${{ matrix.file }}
+          context: ${{ matrix.image == 'http-server' && '/tmp/juice-shop' || format('./source/DockerFiles/{0}', matrix.image) }}
+          file: ${{ matrix.image == 'http-server' && '/tmp/juice-shop/Dockerfile' || format('./source/DockerFiles/{0}/{1}', matrix.image, matrix.file) }}
           push: true
           tags: |
             ghcr.io/${{ env.owner_lc }}/dockersec-${{ matrix.image }}:${{ matrix.tag }}
