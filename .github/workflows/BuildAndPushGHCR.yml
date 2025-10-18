@@ -92,7 +92,9 @@ jobs:
           tags: |
             ${{ matrix.image == 'eve' && format('ghcr.io/{0}/dockersec-eve:{1}-{2}', env.owner_lc, env.version, matrix.tag) || '' }}
             ${{ matrix.image == 'eve' && matrix.tag == 'light' && format('ghcr.io/{0}/dockersec-eve:latest', env.owner_lc) || '' }}
-            ${{ matrix.image != 'eve' && format('ghcr.io/{0}/dockersec-{1}:{2}', env.owner_lc, matrix.image, matrix.tag) || '' }}
+            ${{ matrix.image == 'eve' && matrix.tag == 'light' && format('ghcr.io/{0}/dockersec-eve:{1}', env.owner_lc, env.version) || '' }}
+            ${{ matrix.image != 'eve' && format('ghcr.io/{0}/dockersec-{1}:{2}', env.owner_lc, matrix.image, env.version) || '' }}
+            ${{ matrix.image != 'eve' && format('ghcr.io/{0}/dockersec-{1}:latest', env.owner_lc, matrix.image) || '' }}
           labels: |
             org.opencontainers.image.source=${{ github.repository }}
             org.opencontainers.image.title=dockersec-${{ matrix.image }}
