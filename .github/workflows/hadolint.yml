@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Lint dhcp-server DOCKERFILE
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@v3.3.0
         with:
           dockerfile: ./source/DockerFiles/dhcp-server/DOCKERFILE
           format: sarif
@@ -40,7 +40,7 @@ jobs:
           wait-for-processing: true
 
       - name: Lint dmz-router-external DOCKERFILE
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@v3.3.0
         with:
           dockerfile: ./source/DockerFiles/dmz-router-external/DOCKERFILE
           format: sarif
@@ -55,7 +55,7 @@ jobs:
           wait-for-processing: true
 
       - name: Lint dmz-router-internal DOCKERFILE
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@v3.3.0
         with:
           dockerfile: ./source/DockerFiles/dmz-router-internal/DOCKERFILE
           format: sarif
@@ -70,7 +70,7 @@ jobs:
           wait-for-processing: true
 
       - name: Lint dns-server DOCKERFILE
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@v3.3.0
         with:
           dockerfile: ./source/DockerFiles/dns-server/DOCKERFILE
           format: sarif
@@ -85,7 +85,7 @@ jobs:
           wait-for-processing: true
 
       - name: Lint eve DOCKERFILE
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@v3.3.0
         with:
           dockerfile: ./source/DockerFiles/eve/DOCKERFILE
           format: sarif
@@ -100,7 +100,7 @@ jobs:
           wait-for-processing: true
 
       - name: Lint http-server DOCKERFILE
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@v3.3.0
         with:
           dockerfile: ./source/DockerFiles/http-server/DOCKERFILE
           format: sarif
@@ -115,7 +115,7 @@ jobs:
           wait-for-processing: true
 
       - name: Lint pc1 DOCKERFILE
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@v3.3.0
         with:
           dockerfile: ./source/DockerFiles/pc1/DOCKERFILE
           format: sarif
