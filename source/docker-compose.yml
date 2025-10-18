@@ -78,7 +78,7 @@ services:
     cap_add:
       - NET_ADMIN
     command: >-
-      sh -c "route del default &&
+      sh -c "ip route del default &&
       ip route add default via 192.168.4.10 &&
       service postgresql start &&
       tail -f /dev/null"
@@ -127,7 +127,7 @@ services:
        echo 'nameserver 192.168.3.13' >> /etc/resolv.conf &&
        node /juice-shop/build/app.js "
     ports:
-      - "80:80"
+      - "80:3000"
     networks:
       DMZ:
         ipv4_address: 192.168.3.12
