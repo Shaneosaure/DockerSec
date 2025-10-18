@@ -1,9 +1,8 @@
-name: Build and Push All Docker Images to GHCR
+name: Publish Docker Images to GHCR on Release
 
 on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
+  release:
+    types: [published]   # 🔥 Se déclenche uniquement quand une release est publiée
 
 permissions:
   contents: read
@@ -19,27 +18,34 @@ jobs:
           - image: dhcp-server
             file: DOCKERFILE
             tag: latest
+
           - image: dmz-router-external
             file: DOCKERFILE
             tag: latest
+
           - image: dmz-router-internal
             file: DOCKERFILE
             tag: latest
+
           - image: dns-server
             file: DOCKERFILE
             tag: latest
+
+          # --- EVE flavors ---
           - image: eve
             file: DOCKERFILE
-            tag: latest
-          - image: eve
-            file: DOCKERFILE-FULL
-            tag: full
+            tag: bare
           - image: eve
             file: DOCKERFILE-LIGHT
             tag: light
+          - image: eve
+            file: DOCKERFILE-FULL
+            tag: full
+
           - image: http-server
             file: DOCKERFILE
             tag: latest
+
           - image: pc1
             file: DOCKERFILE
             tag: latest
@@ -52,6 +58,13 @@ jobs:
         id: vars
         run: echo "owner_lc=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
+      - name: Extract release version
+        id: get_version
+        run: |
+          version=${GITHUB_REF#refs/tags/}
+          echo "version=${version}" >> $GITHUB_ENV
+          echo "📦 Building release version: ${version}"
+
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
@@ -59,7 +72,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # --- Special case for http-server (Juice Shop) ---
+      # --- Special case for Juice Shop HTTP Server ---
       - name: Clone OWASP Juice Shop (only for http-server)
         if: matrix.image == 'http-server'
         run: |
@@ -77,8 +90,12 @@ jobs:
           file: ${{ matrix.image == 'http-server' && '/tmp/juice-shop/Dockerfile' || format('./source/DockerFiles/{0}/{1}', matrix.image, matrix.file) }}
           push: true
           tags: |
-            ghcr.io/${{ env.owner_lc }}/dockersec-${{ matrix.image }}:${{ matrix.tag }}
-            ghcr.io/${{ env.owner_lc }}/dockersec-${{ matrix.image }}:${{ github.sha }}
+            # 🧱 Si c’est EVE → versionnée avec flavor (ex: v1.0.0-bare)
+            ${{ matrix.image == 'eve' && format('ghcr.io/{0}/dockersec-eve:{1}-{2}', env.owner_lc, env.version, matrix.tag) || '' }}
+            # 🧱 Si c’est EVE Light → alias "latest"
+            ${{ matrix.image == 'eve' && matrix.tag == 'light' && format('ghcr.io/{0}/dockersec-eve:latest', env.owner_lc) || '' }}
+            # 🧱 Autres images → tag normalisé "latest"
+            ${{ matrix.image != 'eve' && format('ghcr.io/{0}/dockersec-{1}:{2}', env.owner_lc, matrix.image, matrix.tag) || '' }}
           labels: |
             org.opencontainers.image.source=${{ github.repository }}
             org.opencontainers.image.title=dockersec-${{ matrix.image }}
